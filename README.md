@@ -6,7 +6,7 @@
 给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与 target 最接近。
 返回这三个数的和。
 假定每组输入只存在恰好一个解。
-```javascript
+```javascript {0,100}
 /**
  * @param {number[]} nums
  * @param {number} target
@@ -46,3 +46,34 @@ var threeSumClosest = function(nums, target) {
 排序：O(n log n)  
 双指针查找：O(n²)  
 总复杂度：O(n²)
+
+# 2、无重复字符的最长子串
+给定一个字符串 s ，请你找出其中不含有重复字符的 最长 子串 的长度。  
+示例 1:  
+输入: s = "abcabcbb"  
+输出: 3   
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。  
+```javascript  {0,100}
+var lengthOfLongestSubstring = function(s) {
+    let set = new Set();
+    let left = 0;
+    let maxLen = 0;
+
+    for (let right = 0; right < s.length; right++) {
+        // 如果有重复字符，缩小窗口
+        while (set.has(s[right])) {
+            set.delete(s[left]);
+            left++;
+        }
+
+        set.add(s[right]);
+        maxLen = Math.max(maxLen, right - left + 1);
+    }
+
+    return maxLen;
+};
+
+```
+时间复杂度：O(n)：left 和 right 都只移动一次。  
+空间复杂度：O(n)： 用于存储窗口内的字符  
+
