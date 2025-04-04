@@ -42,3 +42,7 @@ var threeSumClosest = function(nums, target) {
     return closestSum;
 };
 ```
+时间复杂度：  
+排序：O(n log n)  
+双指针查找：O(n²)  
+总复杂度：O(n²)
