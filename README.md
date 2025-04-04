@@ -54,23 +54,23 @@ var threeSumClosest = function(nums, target) {
 输出: 3   
 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。  
 ```javascript  {0,100}
-var lengthOfLongestSubstring = function(s) {
-    let set = new Set();
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function (s) {
+    let len = 0;
     let left = 0;
-    let maxLen = 0;
-
+    let map = new Map()
     for (let right = 0; right < s.length; right++) {
-        // 如果有重复字符，缩小窗口
-        while (set.has(s[right])) {
-            set.delete(s[left]);
-            left++;
+        if (map.has(s[right])) {
+            left = Math.max(left, map.get(s[right]) + 1)
         }
-
-        set.add(s[right]);
-        maxLen = Math.max(maxLen, right - left + 1);
+        map.set(s[right], right)
+        len = Math.max(len, right - left + 1)
     }
 
-    return maxLen;
+    return len
 };
 
 ```
