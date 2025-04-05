@@ -53,7 +53,7 @@ var threeSumClosest = function(nums, target) {
 输入: s = "abcabcbb"  
 输出: 3   
 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。  
-```javascript  {0,100}
+```javascript
 /**
  * @param {string} s
  * @return {number}
@@ -77,3 +77,53 @@ var lengthOfLongestSubstring = function (s) {
 时间复杂度：O(n)：left 和 right 都只移动一次。  
 空间复杂度：O(n)： 用于存储窗口内的字符  
 
+# 3、分隔链表
+给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。  
+你应当 保留 两个分区中每个节点的初始相对位置。  
+例如：  
+输入：head = [1,4,3,2,5,2], x = 3  
+输出：[1,2,2,4,3,5]  
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} x
+ * @return {ListNode}
+ */
+var partition = function (head, x) {
+    let smallDummy = new ListNode(0); // 小于x的链表虚拟头
+    let largeDummy = new ListNode(0); // 大于等于x的链表虚拟头
+    let small = smallDummy;
+    let large = largeDummy;
+
+    let current = head;
+    while (current) {
+        if (current.val < x) {
+            small.next = current;
+            small = small.next;
+        } else {
+            large.next = current;
+            large = large.next;
+        }
+        current = current.next;
+    }
+
+    // 断开 large 链表尾巴，防止成环
+    large.next = null;
+    // 连接两个链表
+    small.next = largeDummy.next;
+
+    return smallDummy.next;
+};
+
+```
+ 时间复杂度：O(n) — 单次遍历  
+ 空间复杂度：O(1) — 使用常数级辅助指针  
+
+ # 4、
