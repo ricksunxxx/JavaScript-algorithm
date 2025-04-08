@@ -209,6 +209,68 @@ FreqStack.prototype.pop = function () {
  * obj.push(val);
  * var param_2 = obj.pop();
  */
+```
+时间复杂度：O(1) 
+空间复杂度：O(n)。
 
+# 6、旋转链表：给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+思路:  
+求链表长度：  
+如果长度为 n，旋转 k 次，相当于旋转 k % n 次。  
+闭环再断开：  
+把链表变成一个环（最后一个节点指向头节点）。  
+然后从新位置“断开”环，形成新的头节点。  
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var rotateRight = function (head, k) {
+    if (!head || !head.next || k === 0) return head;
+
+    // 第一步：计算链表长度
+    let length = 1;
+    let tail = head;
+    while (tail.next) {
+        tail = tail.next;
+        length++;
+    }
+
+    // 第二步：将链表连成环
+    tail.next = head;
+
+    // 第三步：找到新的尾节点，新头节点
+    k = k % length;
+    let stepsToNewTail = length - k;
+
+    let newTail = head;
+    while (--stepsToNewTail > 0) {
+        newTail = newTail.next;
+    }
+
+    let newHead = newTail.next;
+
+    // 第四步：断开环
+    newTail.next = null;
+
+    return newHead;
+};
+```
+时间复杂度：O(n)
+空间复杂度：O(1)
+
+# 7、
+
+```javascript
 
 ```
+时间复杂度：
+空间复杂度：
