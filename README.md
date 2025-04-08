@@ -300,14 +300,48 @@ MyCalendar.prototype.book = function (start, end) {
 时间复杂度：O(n)  
 空间复杂度：O(n)  
 
-# 8、
-
+# 8、K个一组翻转链表
+给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。  
+k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。  
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。  
 ```javascript
+function reverseKGroup(head, k) {
+    // 判断链表是否有至少 k 个节点
+    let count = 0;
+    let node = head;
+
+    // 计算链表的长度
+    while (node && count < k) {
+        node = node.next;
+        count++;
+    }
+
+    // 如果剩余的节点不足 k 个，则不翻转，直接返回当前链表
+    if (count < k) {
+        return head;
+    }
+
+    // 翻转前 k 个节点
+    let prev = null;
+    let curr = head;
+    for (let i = 0; i < k; i++) {
+        let nextTemp = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = nextTemp;
+    }
+
+    // 递归调用处理剩下的部分
+    // head 是当前翻转后的部分的尾节点，curr 是下一个待翻转部分的头节点
+    head.next = reverseKGroup(curr, k);
+
+    // 返回翻转后的新头节点
+    return prev;
+}
 
 ```
-时间复杂度：  
-空间复杂度：
-
+时间复杂度：O(n)  
+空间复杂度：O(n / k)（递归调用栈）  
 # 9、
 
 ```javascript
