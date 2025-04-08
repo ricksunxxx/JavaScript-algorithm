@@ -213,8 +213,9 @@ FreqStack.prototype.pop = function () {
 时间复杂度：O(1) 
 空间复杂度：O(n)。
 
-# 6、旋转链表：给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
-思路:  
+# 6、旋转链表
+题目：给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。  
+解题思路:  
 求链表长度：  
 如果长度为 n，旋转 k 次，相当于旋转 k % n 次。  
 闭环再断开：  
@@ -264,7 +265,7 @@ var rotateRight = function (head, k) {
     return newHead;
 };
 ```
-时间复杂度：O(n)
+时间复杂度：O(n)  
 空间复杂度：O(1)
 
 # 7、
@@ -272,5 +273,13 @@ var rotateRight = function (head, k) {
 ```javascript
 
 ```
-时间复杂度：
-空间复杂度：
+时间复杂度：  
+空间复杂度：  
+
+# 8、
+
+```javascript
+
+```
+时间复杂度：  
+空间复杂度：  
