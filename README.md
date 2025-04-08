@@ -154,4 +154,61 @@ var removeElement = function (nums, val) {
 时间复杂度：O(n) 最坏情况下，可能要遍历 n 次（数组长度）。  
 空间复杂度：O(1)。 
 
-# 5、
+# 5、最大频率栈
+设计一个类似堆栈的数据结构，将元素推入堆栈，并从堆栈中弹出出现频率最高的元素。  
+实现 FreqStack 类:FreqStack() 构造一个空的堆栈。  
+void push(int val) 将一个整数 val 压入栈顶。  
+int pop() 删除并返回堆栈中出现频率最高的元素。  
+如果出现频率最高的元素不只一个，则移除并返回最接近栈顶的元素。  
+```javascript
+var FreqStack = function () {
+    this.map = {};        // 存储元素的频率
+    this.groupMap = {};   // 存储频率对应的元素栈
+    this.maxFreq = 0;     // 当前最大频率
+};
+
+/** 
+ * @param {number} val
+ * @return {void}
+ */
+FreqStack.prototype.push = function (val) {
+    // 更新元素频率
+    const freq = (this.map[val] = (this.map[val] || 0) + 1);
+    
+    // 更新最大频率
+    this.maxFreq = Math.max(this.maxFreq, freq);
+    
+    // 将元素加入对应频率的栈中
+    if (!this.groupMap[freq]) {
+        this.groupMap[freq] = [];
+    }
+    this.groupMap[freq].push(val);
+};
+
+/**
+ * @return {number}
+ */
+FreqStack.prototype.pop = function () {
+    // 从最大频率的栈中弹出最接近栈顶的元素
+    const val = this.groupMap[this.maxFreq].pop();
+
+    // 更新元素频率
+    this.map[val]--;
+
+    // 如果该频率的元素栈空了，更新最大频率
+    if (this.groupMap[this.maxFreq].length === 0) {
+        this.maxFreq--;
+    }
+
+    return val;
+};
+
+/** 
+ * Your FreqStack object will be instantiated and called as such:
+ * var obj = new FreqStack();
+ * obj.push(val);
+ * var param_2 = obj.pop();
+ */
+
+
+```
