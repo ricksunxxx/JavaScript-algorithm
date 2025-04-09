@@ -414,5 +414,26 @@ function buildTree(preorder, inorder) {
 空间复杂度：O(n)	递归栈 + 哈希表（Map）
 
 
+# 10、路径总和
+给你二叉树的根节点 root 和一个表示目标和的整数 targetSum 。  
+判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。  
+如果存在，返回 true ；否则，返回 false 。  
+叶子节点 是指没有子节点的节点。
+```javascript
+function hasPathSum(root, targetSum) {
+    if (!root) return false;
 
+    // 如果是叶子节点，判断路径和是否等于 targetSum
+    if (!root.left && !root.right) {
+        return root.val === targetSum;
+    }
+
+    // 递归左右子树，更新目标值
+    const newTarget = targetSum - root.val;
+    return hasPathSum(root.left, newTarget) || hasPathSum(root.right, newTarget);
+}
+
+```
+时间复杂度：O(n)每个节点访问一次  
+空间复杂度：O(h)h 是树的高度（递归栈），最坏 O(n)，最好 O(log n)
 
