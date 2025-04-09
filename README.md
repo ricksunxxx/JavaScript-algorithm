@@ -478,6 +478,10 @@ var isValidBST = function (root) {
 空间复杂度：O(h) h 是树的高度（递归栈空间） 
 
 这个题其实还要第二种解法：中序遍历 + 判断是否严格递增，因为中序遍历的结果一定是严格递增的。  
+按照「中序遍历」访问每个节点  
+记录上一个访问的节点值 prev  
+如果当前节点值 <= prev，说明不合法，返回 false  
+如果遍历完整棵树都没出错，说明是合法 BST  
 
 ```javascript
 var isValidBST = function (root) {
