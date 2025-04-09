@@ -437,3 +437,71 @@ function hasPathSum(root, targetSum) {
 时间复杂度：O(n)每个节点访问一次  
 空间复杂度：O(h)h 是树的高度（递归栈），最坏 O(n)，最好 O(log n)
 
+# 12、验证二叉搜索树
+给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。  
+有效 二叉搜索树定义如下：  
+节点的左子树只包含 小于 当前节点的数。  
+节点的右子树只包含 大于 当前节点的数。  
+所有左子树和右子树自身必须也是二叉搜索树。    
+
+解题思路：递归 + 限定上下界  
+核心思想：  
+对于每个节点 node，它的值必须在 (min, max) 区间内  
+左子树的合法范围是 (min, node.val)  
+右子树的合法范围是 (node.val, max)  
+初始时，对根节点来说，min = -Infinity，max = Infinity  
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isValidBST = function (root) {
+    function valid(root, left, right) {
+        if (!root) return true
+        if (root.val <= left || root.val >= right) return false
+
+        return (valid(root.left, left, root.val) && valid(root.right, root.val, right))
+    }
+
+    return valid(root, -Infinity, Infinity)
+};
+```
+时间复杂度：O(n) 每个节点访问一次  
+空间复杂度：O(h) h 是树的高度（递归栈空间） 
+
+这个题其实还要第二种解法：中序遍历 + 判断是否严格递增，因为中序遍历的结果一定是严格递增的。  
+
+```javascript
+var isValidBST = function (root) {
+    let prev = null;
+
+    function inOrder(node) {
+        if (!node) return true;
+
+        if (!inOrder(node.left)) return false;
+
+        if (prev !== null && node.val <= prev) {
+            return false;
+        }
+
+        prev = node.val;
+
+        return inOrder(node.right);
+    }
+
+    return inOrder(root);
+};
+```
+时间复杂度：O(n) 每个节点访问一次  
+空间复杂度：O(h) 递归栈深度，h 是树高，最坏 O(n)，最好 O(log n)  
+
+
+
