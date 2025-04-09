@@ -371,3 +371,48 @@ var leastBricks = function (wall) {
 ```
 时间复杂度：O(n × m)    
 空间复杂度：O(n × m)（最坏）
+
+# 10、从前序和中序遍历序列构造二叉树。
+给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。  
+
+```javascript
+class TreeNode {
+    constructor(val) {
+        this.val = val;
+        this.left = this.right = null;
+    }
+}
+
+function buildTree(preorder, inorder) {
+    // 用哈希表加速 index 查找
+    const inorderIndexMap = new Map();
+    inorder.forEach((val, idx) => inorderIndexMap.set(val, idx));
+
+    let preIndex = 0;
+
+    function build(left, right) {
+        if (left > right) return null; // 没有节点了
+
+        // 当前根节点值
+        const rootVal = preorder[preIndex++];
+        const root = new TreeNode(rootVal);
+
+        // 根节点在中序中的位置
+        const index = inorderIndexMap.get(rootVal);
+
+        // 递归构建左右子树
+        root.left = build(left, index - 1);
+        root.right = build(index + 1, right);
+
+        return root;
+    }
+
+    return build(0, inorder.length - 1);
+}
+```
+时间复杂度：O(n)	每个节点处理一次，使用哈希加速查找  
+空间复杂度：O(n)	递归栈 + 哈希表（Map）
+
+
+
+
