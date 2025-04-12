@@ -579,3 +579,61 @@ function minStepsToOne(n) {
 时间复杂度：O(log n)   
 空间复杂度：O(1) 
 
+
+# 15、dfs+剪枝
+给定数组 powers，长度为 10。
+目标是找出两个5人小组，使得 Math.abs(组1战力和 - 组2战力和) 最小。 
+
+解题思路：    
+从 powers 中选出 5 个人组成一组。  
+总战力和为 totalSum，目标是让一组的和尽量接近 totalSum / 2。  
+使用 DFS 遍历组合时：  
+路径长度超过 5 剪枝。  
+和已经超过一半时剪枝（不可能更优）。  
+当前路径差值大于已知最小差值时剪枝。    
+```JavaScript
+function minTeamDiff(powers) {
+  const totalSum = powers.reduce((a, b) => a + b, 0); // 所有玩家战力的总和
+  const targetCount = 5; // 每组5个人
+  const n = powers.length;
+
+  let minDiff = Infinity; // 初始最小差设为无限大
+
+  /**
+   * DFS 函数
+   * @param {number} index 当前搜索到的下标
+   * @param {number} count 当前选中的人数
+   * @param {number} sum 当前选中人数的战斗力和
+   */
+  function dfs(index, count, sum) {
+    // 剪枝：人数超过5，非法
+    if (count > targetCount) return;
+
+    // 如果刚好选了5个人，计算当前分组与另一组的差值
+    if (count === targetCount) {
+      const otherSum = totalSum - sum; // 另一组的战斗力和
+      const diff = Math.abs(sum - otherSum); // 两组差值
+      minDiff = Math.min(minDiff, diff); // 更新最小差值
+      return;
+    }
+
+    // 搜索完数组
+    if (index === n) return;
+
+    // 剪枝：如果当前状态已经不可能优于现有答案，就停止
+    if (Math.abs(sum * 2 - totalSum) >= minDiff) return;
+
+    // 选中当前玩家
+    dfs(index + 1, count + 1, sum + powers[index]);
+
+    // 不选当前玩家
+    dfs(index + 1, count, sum);
+  }
+
+  dfs(0, 0, 0); // 从下标0开始，当前选中人数为0，战斗力和为0
+  return minDiff;
+}
+
+```
+时间复杂度：对于这个问题的输入大小（n = 10，k = 5），时间复杂度为 O(C(n, k)) = O(252)，可以视为 O(1)。  
+空间复杂度：递归栈和路径存储的空间复杂度为 O(k) = O(5)，也可以视为 O(1) 对于固定 k。  
