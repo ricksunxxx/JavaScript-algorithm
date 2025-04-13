@@ -650,7 +650,7 @@ function minTeamDiff(powers) {
 例如：  
 输入：  
 2  
-aaa_password_"a12_45678"_timeout__100_""_
+aaa_password_"a12_45678"_timeout__100_""_  
 输出：  
 aaa_password_******_timeout_100_""
     
