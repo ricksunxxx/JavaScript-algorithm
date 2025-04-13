@@ -646,15 +646,12 @@ function minTeamDiff(powers) {
 3、可以通过两个双引号””来标识包含下划线_的命令字或空命令字（仅包含两个双引号的命令字），双引号不会在命令字内部出现；  
 请对指定索引的敏感字段进行加密，替换为******（6个*），并删除命令字前后多余的下划线_。  
 如果无法找到指定索引的命令字，输出字符串ERROR。  
-
-例如：  
-输入：  
-2  
-aaa_password_"a12_45678"_timeout__100_""_  
-输出：  
-aaa_password_******_timeout_100_""
-    
 ```JavaScript
+/*
+输入：2  aaa_password_"a12_45678"_timeout__100_""_    
+输出：aaa_password_******_timeout_100_""  
+
+*/
 function processCommand(K, S) {
     const parts = [];
     let i = 0;
