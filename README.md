@@ -637,3 +637,72 @@ function minTeamDiff(powers) {
 ```
 时间复杂度：对于这个问题的输入大小（n = 10，k = 5），时间复杂度为 O(C(n, k)) = O(252)，可以视为 O(1)。  
 空间复杂度：递归栈和路径存储的空间复杂度为 O(k) = O(5)，也可以视为 O(1) 对于固定 k。  
+
+
+# 16、命令字符串加密
+给定一个由多个命令字组成的命令字符串：  
+1、字符串长度小于等于127字节，只包含大小写字母，数字，下划线和偶数个双引号；  
+2、命令字之间以一个或多个下划线_进行分割；  
+3、可以通过两个双引号””来标识包含下划线_的命令字或空命令字（仅包含两个双引号的命令字），双引号不会在命令字内部出现；  
+请对指定索引的敏感字段进行加密，替换为******（6个*），并删除命令字前后多余的下划线_。  
+如果无法找到指定索引的命令字，输出字符串ERROR。  
+
+例如：  
+输入：  
+2  
+aaa_password_"a12_45678"_timeout__100_""_
+输出：  
+aaa_password_******_timeout_100_""
+    
+```JavaScript
+function processCommand(K, S) {
+    const parts = [];
+    let i = 0;
+    const n = S.length;
+
+    while (i < n) {
+        if (S[i] === '"') {
+            // 处理双引号内的命令字
+            let start = i;
+            i++; // 跳过第一个双引号
+            while (i < n && S[i] !== '"') {
+                i++;
+            }
+            i++; // 跳过第二个双引号
+            parts.push(S.slice(start, i)); // 包括双引号本身
+        } else {
+            // 处理普通的命令字
+            let start = i;
+            while (i < n && S[i] !== '"' && S[i] !== '_') {
+                i++;
+            }
+            parts.push(S.slice(start, i)); // 提取命令字并加入 parts
+        }
+
+        // 跳过一个或多个下划线
+        while (i < n && S[i] === '_') {
+            i++;
+        }
+    }
+
+    // 检查索引是否有效
+    if (K < 0 || K >= parts.length) {
+        return "ERROR";
+    }
+
+    // 替换指定索引的命令字为 6 个星号
+    parts[K] = "******";
+
+    // 生成最终命令字符串
+    let result = parts.join('_');
+
+    // 删除首尾多余的下划线
+    result = result.replace(/^_+|_+$/g, '');
+
+    return result;
+}
+
+
+```
+时间复杂度： O(n)，其中 n 是字符串的长度。  
+空间复杂度： O(n)，其中 n 是字符串的长度。  
