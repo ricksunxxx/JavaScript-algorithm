@@ -42,7 +42,7 @@ var threeSumClosest = function(nums, target) {
     return closestSum;
 };
 ```
-时间复杂度：O(n^2) 外层循环是 O(n) 内层双指针遍历是 O(n)（每次最多走一次
+时间复杂度：O(n^2) 外层循环是 O(n) 内层双指针遍历是 O(n)（每次最多走一次  
 空间复杂度：O(1) 排序用了 O(log n) 的栈空间（如果不算也可以近似认为是 O(1)） 没有额外开数组或结构
 
 # 2、无重复字符的最长子串
