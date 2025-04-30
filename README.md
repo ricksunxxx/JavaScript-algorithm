@@ -703,3 +703,41 @@ function processCommand(K, S) {
 ```
 时间复杂度： O(n)，其中 n 是字符串的长度。  
 空间复杂度： O(n)，其中 n 是字符串的长度。  
+
+
+# 17、滑动窗口最大值（LeetCode 239）
+给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。  
+返回 滑动窗口中的最大值   
+
+```JavaScript
+function maxSlidingWindow(nums, k) {
+  const deque = []; // 用来存索引，队列中的值对应 nums[索引] 是单调递减的
+  const result = []; // 最终结果
+
+  for (let i = 0; i < nums.length; i++) {
+    // Step 1: 移除队尾所有比当前值小的元素，它们不可能是未来的最大值
+    while (deque.length > 0 && nums[deque[deque.length - 1]] < nums[i]) {
+      deque.pop(); // 弹出尾部较小值的索引
+    }
+
+    // Step 2: 把当前元素的索引加入队尾
+    deque.push(i);
+
+    // Step 3: 检查队首是否已经滑出窗口（不在当前窗口范围内）
+    if (deque[0] <= i - k) {
+      deque.shift(); // 移除已经过期的最大值索引
+    }
+
+    // Step 4: 只有形成了完整窗口后，才开始记录最大值
+    if (i >= k - 1) {
+      result.push(nums[deque[0]]); // 队首元素就是当前窗口最大值
+    }
+  }
+
+  return result;
+}
+
+```
+时间复杂度： O(n)，总共最多 2n 次队列操作，仍是线性时间。  
+空间复杂度： O(k)，队列 deque 最多只会存放 当前窗口内的元素索引，即最多 k 个。
+
