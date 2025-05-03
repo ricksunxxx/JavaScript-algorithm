@@ -813,3 +813,186 @@ function trap(height) {
 ```
 时间复杂度： O(n)，每个指针最多移动 n 次。    
 空间复杂度： O(1)，只用了常量变量。 
+
+# 20、最大子数组和（LeetCode 53）
+给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。  
+子数组是数组中的一个连续部分。
+```JavaScript
+function maxSubArray(nums) {
+  let maxSum = -Infinity; // 存储最终的最大子数组和
+  let preSum = 0;         // 当前的前缀和（从头到当前位置的和）
+  let minPreSum = 0;      // 当前遇到的最小前缀和
+
+  for (let i = 0; i < nums.length; i++) {
+    preSum += nums[i]; // 累加前缀和
+
+    // 当前区间最大子数组和 = preSum - 最小前缀和
+    // 意思是：从某个历史位置 minPreSum 到当前位置 i 之间的最大子数组和
+    maxSum = Math.max(maxSum, preSum - minPreSum);
+
+    // 更新最小前缀和：保留最小的前缀和位置，用于下一个位置比较
+    minPreSum = Math.min(minPreSum, preSum);
+  }
+
+  return maxSum;
+}
+
+
+```
+时间复杂度： O(n)  
+空间复杂度： O(1)
+
+
+# 21、合并区间（LeetCode 56）
+以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+```JavaScript
+function merge(intervals) {
+  if (intervals.length === 0) return [];
+
+  // 第一步：按区间起点升序排序，确保遍历时先处理靠前的区间
+  intervals.sort((a, b) => a[0] - b[0]);
+
+  const result = []; // 用于保存合并后的区间
+
+  // 遍历所有区间
+  for (const interval of intervals) {
+    const last = result.at(-1); // 获取当前结果中最后一个区间（注意：.at(-1) 是 ES2022+ 的新写法）
+
+    if (!last || last[1] < interval[0]) {
+      // 情况一：result 为空，或者当前区间和最后一个区间不重叠
+      // 直接将当前区间加入结果数组
+      result.push(interval);
+    } else {
+      // 情况二：有重叠，说明两个区间可以合并
+      // 更新最后一个区间的结束位置为较大值
+      last[1] = Math.max(last[1], interval[1]);
+    }
+  }
+
+  return result; // 返回合并后的不重叠区间数组
+}
+
+
+```
+时间复杂度： O(n log n)	排序占主导，n 为区间数  
+空间复杂度： O(n)	最坏情况下结果仍保留所有区间	
+
+# 22、轮转数组（LeetCode 189）
+给定一个整数数组 nums，将数组中的元素向右轮转 k 个位置，其中 k 是非负数。
+```JavaScript
+function rotate(nums, k) {
+  const n = nums.length;
+  k %= n; // 防止 k > n 的情况
+
+  // 反转函数，反转 nums[i..j]
+  function reverse(i, j) {
+    while (i < j) {
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+      i++;
+      j--;
+    }
+  }
+
+  // 三步反转
+  reverse(0, n - 1);     // 1. 整体反转
+  reverse(0, k - 1);     // 2. 反转前 k 个
+  reverse(k, n - 1);     // 3. 反转后 n-k 个
+}
+
+```
+时间复杂度： O(n) 每个元素最多移动一次  
+空间复杂度： O(1) 原地修改，无额外空间
+
+# 23、除自身以外数组的乘积（LeetCode 238）
+给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积 。  
+题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在  32 位 整数范围内。  
+请不要使用除法，且在 O(n) 时间复杂度内完成此题。  
+```JavaScript
+function productExceptSelf(nums) {
+  const n = nums.length;
+  const answer = new Array(n).fill(1);
+
+  // 第一次遍历：计算左边的乘积
+  let left = 1;
+  for (let i = 0; i < n; i++) {
+    answer[i] = left;     // 存储左侧所有元素乘积
+    left *= nums[i];      // 更新左乘积
+  }
+
+  // 第二次遍历：计算右边的乘积，同时乘到结果中
+  let right = 1;
+  for (let i = n - 1; i >= 0; i--) {
+    answer[i] *= right;   // 乘上右侧所有元素乘积
+    right *= nums[i];     // 更新右乘积
+  }
+
+  return answer;
+}
+
+
+```
+时间复杂度：O(n)	两次线性遍历  
+空间复杂度：O(1)	不算输出数组 answer，原地操作节省空间  
+
+# 24、缺失的第一个正数（LeetCode 41）
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数。   
+请你实现时间复杂度为 O(n) 并且只使用常数级别额外空间的解决方案。
+```JavaScript
+function firstMissingPositive(nums) {
+    const n = nums.length;
+
+    // 1. 处理数组中的无效值
+    for (let i = 0; i < n; i++) {
+        if (nums[i] <= 0 || nums[i] > n) {
+            nums[i] = n + 1; // 将无效值设置为大于 n 的值
+        }
+    }
+
+    // 2. 放每个元素到它应该出现的位置
+    for (let i = 0; i < n; i++) {
+        const num = Math.abs(nums[i]);
+        if (num <= n && nums[num - 1] > 0) {
+            nums[num - 1] = -Math.abs(nums[num - 1]);
+        }
+    }
+
+    // 3. 查找第一个未标记的正整数
+    for (let i = 0; i < n; i++) {
+        if (nums[i] > 0) {
+            return i + 1;
+        }
+    }
+
+    // 如果都没有缺失，说明最小的正整数是 n + 1
+    return n + 1;
+}
+
+
+```
+时间复杂度： O(n)  
+空间复杂度： O(1)
+
+
+
+
+# 、（LeetCode ）
+
+```JavaScript
+
+
+```
+时间复杂度： 
+空间复杂度：
+
+
+
+
+# 、（LeetCode ）
+
+```JavaScript
+
+
+```
+时间复杂度： 
+空间复杂度：
+
