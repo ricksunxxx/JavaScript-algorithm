@@ -777,4 +777,41 @@ function maxArea(height) {
 时间复杂度： O(n)，每个指针最多移动 n 次。    
 空间复杂度： O(1)，只用了常量变量。  
 
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
+# 19、接雨水（LeetCode 42）
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+```JavaScript
+function trap(height) {
+  let left = 0;                  // 左指针
+  let right = height.length - 1; // 右指针
+  let leftMax = 0;               // 左边历史最高柱子
+  let rightMax = 0;              // 右边历史最高柱子
+  let res = 0;                   // 最终接水量
+
+  while (left < right) {
+    // 不断更新左右最大高度
+    leftMax = Math.max(leftMax, height[left]);
+    rightMax = Math.max(rightMax, height[right]);
+
+    // 决定由哪一边计算水量：较低的一侧才是“瓶颈”
+    if (leftMax < rightMax) {
+      // 左边较矮，可以确定水位
+      res += leftMax - height[left]; // 当前柱子能接的水 = 水位 - 柱高
+      left++;                        // 左指针向右移动
+    } else {
+      // 右边较矮，可以确定水位
+      res += rightMax - height[right];
+      right--;                       // 右指针向左移动
+    }
+  }
+
+  return res;
+}
+
+}
+
+```
+时间复杂度： O(n)，每个指针最多移动 n 次。    
+空间复杂度： O(1)，只用了常量变量。 
