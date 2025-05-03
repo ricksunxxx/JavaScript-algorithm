@@ -741,3 +741,40 @@ function maxSlidingWindow(nums, k) {
 时间复杂度： O(n)，总共最多 2n 次队列操作，仍是线性时间。  
 空间复杂度： O(k)，队列 deque 最多只会存放 当前窗口内的元素索引，即最多 k 个。
 
+
+
+# 18、盛水最多的容器（LeetCode 11）
+给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
+找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+返回容器可以储存的最大水量。
+说明：你不能倾斜容器。
+
+```JavaScript
+function maxArea(height) {
+  let left = 0;                 // 左指针
+  let right = height.length - 1; // 右指针
+  let maxArea = 0;
+
+  while (left < right) {
+    const width = right - left;                         // 当前宽度
+    const minHeight = Math.min(height[left], height[right]); // 当前高度
+    const area = width * minHeight;                     // 当前面积
+    maxArea = Math.max(maxArea, area);                  // 更新最大面积
+
+    // 移动较短的一边
+    if (height[left] < height[right]) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+
+  return maxArea;
+}
+
+
+```
+时间复杂度： O(n)，每个指针最多移动 n 次。    
+空间复杂度： O(1)，只用了常量变量。  
+
+
